@@ -1,11 +1,11 @@
 import mongoose from "mongoose"
 
-const SaleSchema = new mongoose.Schema(
+const MotorSchema = new mongoose.Schema(
     {
         branch: {
             type: String,
             enum: ["head-office-kasoa", "walantu-kasoa", "escobar-kasoa", "buduburam-liberia-camp", "dwenase-sefwi-wiawso"],
-        },        
+        },
         vehicle: {
             type: {
                 type: String,
@@ -26,28 +26,18 @@ const SaleSchema = new mongoose.Schema(
                 unique: true,
             }
         },
-        customer: {
-            firstname: {
-                type: String,
-            },
-            othername: {
-                type: String,
-            },
-            lastname: {
-                type: String,
-            },
-            phone: {
-                type: String,
-            },
-        },
         amount: {
             type: Number,
         },
         status: {
             type: String,
-            enum: ["paid in full", "paid in installments"],
+            enum: ["in stock", "out of stock"],
         },
         createdAt: {
+            type: Date,
+            default: Date.now,
+        },
+        updatedAt: {
             type: Date,
             default: Date.now,
         },
@@ -58,6 +48,6 @@ const SaleSchema = new mongoose.Schema(
 
 )
 
-const Sale = mongoose.models.Sale || mongoose.model("Sale", SaleSchema)
+const Motor = mongoose.models.Motor || mongoose.model("Motor", MotorSchema)
 
-export default Sale
+export default Motor

@@ -1,6 +1,6 @@
 "use server"
 
-export async function postInventoryAction(
+export async function postMotorAction(
     branch: string,
     vehicle: {
         type: string
@@ -12,7 +12,7 @@ export async function postInventoryAction(
     amount: number,
 ) {
     try {
-        const response = await fetch(`${process.env.BASE_URL}/api/inventory/postInventory`, {
+        const response = await fetch(`${process.env.BASE_URL}/api/motors/postMotor`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,7 +25,7 @@ export async function postInventoryAction(
             })
         })
         if (!response.ok) {
-            throw new Error("Failed to post inventory")
+            throw new Error("Failed to post motor")
         }
         return response.json()
     } catch (error) { 

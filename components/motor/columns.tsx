@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Inventory } from "@/hooks/useGetInventory";
+import { Motor } from "@/hooks/useGetMotors";
 
-export const columns: ColumnDef<Inventory>[] = [
+export const columns: ColumnDef<Motor>[] = [
     {
         accessorKey: "branch",
         header: () => (

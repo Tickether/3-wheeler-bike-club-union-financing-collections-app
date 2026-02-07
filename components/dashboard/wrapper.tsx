@@ -9,17 +9,17 @@ import Link from "next/link";
 export function Wrapper() {
     const menuItems = [
         {
-            title: "Inventory",
-            description: "Complete vehicle inventory management system",
+            title: "Motor",
+            description: "Complete motor vehicle management system",
             icon: Package,
-            href: "/inventory",
+            href: "/motor",
             iconBg: "bg-chart-1/10",
             iconColor: "text-chart-1",
             borderColor: "border-chart-1/30",
             hoverColor: "hover:bg-chart-1/5 hover:border-chart-1/50",
             features: [
                 "View all vehicles",
-                "Add new inventory",
+                "Add new motor vehicles",
                 "Update stock status",
                 "Track vehicle details",
             ],

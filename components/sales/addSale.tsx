@@ -23,7 +23,7 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CirclePile, Loader2, ChevronLeft, ChevronRight, Plus } from "lucide-react"
 import { useForm } from "@tanstack/react-form"
-import { Inventory } from "@/hooks/useGetInventory"
+import { Motor } from "@/hooks/useGetMotors"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Combobox,
@@ -43,7 +43,7 @@ import { PhoneInput } from "../ui/phone-input"
 import { useEffect, useRef, useState } from "react"
 import { postSaleAction } from "@/app/actions/sales/postSaleAction"
 import { toast } from "sonner"
-import { updateInventoryAction } from "@/app/actions/inventory/updateInventoryAction"
+import { updateMotorAction } from "@/app/actions/motors/updateMotorAction"
 import { BRANCHES, VEHICLE_TYPES } from "@/utils/constants"
 
 
@@ -71,51 +71,51 @@ const addSaleFormSchema = z.object({
 })
 
 export interface AddSaleProps {
-  inventory: Inventory[]
+  motor: Motor[]
   getSales: () => void
 }
 
-interface InventoryByVehicleTypeForCombobox {
+interface MotorByVehicleTypeForCombobox {
   model: string
   color: string
   value: string
 }
 
-export function AddSale({ inventory, getSales }: AddSaleProps) {
-  console.log(inventory)
+export function AddSale({ motor, getSales }: AddSaleProps) {
+  console.log(motor)
 
   useEffect(() => {
-    if (inventory && inventory.length > 0) {
-      const formatted = inventory.filter((item) => item.status === "in stock")
-      setInventoryInStock(formatted)
+    if (motor && motor.length > 0) {
+      const formatted = motor.filter((item) => item.status === "in stock")
+      setMotorInStock(formatted)
     } else {
-      setInventoryInStock([])
+      setMotorInStock([])
     }
-  }, [inventory])
+  }, [motor])
 
-  const [inventoryInStock, setInventoryInStock] = useState<Inventory[]>([])
-  console.log(inventoryInStock)
-  const [inventoryByBranch, setInventoryByBranch] = useState<Inventory[]>([])  
-  console.log(inventoryByBranch)
-  const [inventoryByVehicleType, setInventoryByVehicleType] = useState<Inventory[]>([])
-  console.log(inventoryByVehicleType)
-  const [inventoryByVehicleTypeForCombobox, setInventoryByVehicleTypeForCombobox] = useState<InventoryByVehicleTypeForCombobox[]>([])
-  console.log(inventoryByVehicleTypeForCombobox)
+  const [motorInStock, setMotorInStock] = useState<Motor[]>([])
+  console.log(motorInStock)
+  const [motorByBranch, setMotorByBranch] = useState<Motor[]>([])  
+  console.log(motorByBranch)
+  const [motorByVehicleType, setMotorByVehicleType] = useState<Motor[]>([])
+  console.log(motorByVehicleType)
+  const [motorByVehicleTypeForCombobox, setMotorByVehicleTypeForCombobox] = useState<MotorByVehicleTypeForCombobox[]>([])
+  console.log(motorByVehicleTypeForCombobox)
 
 
 
   useEffect(() => {
-    if (inventoryByVehicleType && inventoryByVehicleType.length ) {
-      const formatted = inventoryByVehicleType.map((item) => ({
+    if (motorByVehicleType && motorByVehicleType.length ) {
+      const formatted = motorByVehicleType.map((item) => ({
         model: item.vehicle.model,
         color: item.vehicle.color,
         value: item.vehicle.vin,
       }))
-      setInventoryByVehicleTypeForCombobox(formatted)
+      setMotorByVehicleTypeForCombobox(formatted)
     } else {
-      setInventoryByVehicleTypeForCombobox([])
+      setMotorByVehicleTypeForCombobox([])
     }
-  }, [inventoryByVehicleType])
+  }, [motorByVehicleType])
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [step, setStep] = useState(1)
@@ -139,7 +139,7 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
       setIsSubmitting(true)
       console.log(value)
       try {
-        const sale = inventoryByVehicleType!.find((inventoryByVehicleType) => inventoryByVehicleType.vehicle.vin === value.vehicleVin)
+        const sale = motorByVehicleType!.find((motorByVehicleType) => motorByVehicleType.vehicle.vin === value.vehicleVin)
         if (sale) {
           const postSale = await postSaleAction(
             value.branch,
@@ -159,8 +159,8 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
             Number(sale?.amount),
           )
           if (postSale) {
-            const updateInventory = await updateInventoryAction(sale?._id)
-            if (updateInventory) {
+            const updateMotor = await updateMotorAction(sale?._id)
+            if (updateMotor) {
               toast.success("Sale Recorded Successfully", {
                 description: "You can now add another sale or close this dialog",
               })
@@ -168,7 +168,7 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
               addSaleForm.reset();
               getSales()
             } else {
-              toast.error("Failed to update inventory.", {
+              toast.error("Failed to update motor.", {
                 description: "Something went wrong, please try again",
               })
               setIsSubmitting(false);
@@ -257,12 +257,12 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                                   onValueChange={
                                     (value) => {
                                       field.handleChange(value)
-                                      if (inventoryInStock && inventoryInStock?.length > 0){
-                                        const filteredInventoryByBranch = inventoryInStock.filter((inventoryInStock) => inventoryInStock.branch === value)
-                                        setInventoryByBranch(filteredInventoryByBranch)
+                                      if (motorInStock && motorInStock?.length > 0){
+                                        const filteredMotorByBranch = motorInStock.filter((motorInStock) => motorInStock.branch === value)
+                                        setMotorByBranch(filteredMotorByBranch)
                                         if (addSaleForm.state.values.vehicleType.length > 0) {
-                                          const filteredInventoryByVehicleType = filteredInventoryByBranch.filter((inventoryByBranch) => inventoryByBranch.vehicle.type === addSaleForm.state.values.vehicleType)
-                                          setInventoryByVehicleType(filteredInventoryByVehicleType)
+                                          const filteredMotorByVehicleType = filteredMotorByBranch.filter((motorByBranch) => motorByBranch.vehicle.type === addSaleForm.state.values.vehicleType)
+                                          setMotorByVehicleType(filteredMotorByVehicleType)
                                         }
                                       }
                                     }
@@ -302,9 +302,9 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                               value={field.state.value}
                               onValueChange={(value) => {
                                 field.handleChange(value)
-                                if (inventoryByBranch && inventoryByBranch?.length > 0){
-                                  const filteredInventoryByVehicleType = inventoryByBranch.filter((inventoryByBranch) => inventoryByBranch.vehicle.type === value)
-                                  setInventoryByVehicleType(filteredInventoryByVehicleType)
+                                if (motorByBranch && motorByBranch?.length > 0){
+                                  const filteredMotorByVehicleType = motorByBranch.filter((motorByBranch) => motorByBranch.vehicle.type === value)
+                                  setMotorByVehicleType(filteredMotorByVehicleType)
                                 }
                               }}
                               disabled={isSubmitting}
@@ -338,10 +338,10 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
                             <FieldLabel htmlFor={field.name} className="text-primary">Vin</FieldLabel>
                             <Combobox
-                              items={inventoryByVehicleTypeForCombobox}
-                              itemToStringValue={(inventoryByVehicleType: InventoryByVehicleTypeForCombobox) => inventoryByVehicleType.value}
-                              value={inventoryByVehicleTypeForCombobox.find((item) => item.value === field.state.value) || null}
-                              onValueChange={(selectedItem: InventoryByVehicleTypeForCombobox | null) => {
+                              items={motorByVehicleTypeForCombobox}
+                              itemToStringValue={(motorByVehicleType: MotorByVehicleTypeForCombobox) => motorByVehicleType.value}
+                              value={motorByVehicleTypeForCombobox.find((item) => item.value === field.state.value) || null}
+                              onValueChange={(selectedItem: MotorByVehicleTypeForCombobox | null) => {
                                 if (selectedItem) {
                                   field.handleChange(selectedItem.value)
                                 } else {
@@ -354,21 +354,21 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                               <ComboboxContent container={dialogContentRef}>
                                 <ComboboxEmpty>No vehicles found.</ComboboxEmpty>
                                 <ComboboxList>
-                                  {(inventoryByVehicleTypeForCombobox) => (
-                                    <ComboboxItem key={inventoryByVehicleTypeForCombobox.value} value={inventoryByVehicleTypeForCombobox}>
+                                  {(motorByVehicleTypeForCombobox) => (
+                                    <ComboboxItem key={motorByVehicleTypeForCombobox.value} value={motorByVehicleTypeForCombobox}>
                                       <Item size="sm" className="p-0">
                                         <ItemContent>
                                           <ItemTitle className="whitespace-nowrap">
                                             <div
                                               className="w-4 h-4 rounded-sm"
                                               style={{
-                                                backgroundColor: inventoryByVehicleTypeForCombobox.color,
+                                                backgroundColor: motorByVehicleTypeForCombobox.color,
                                               }}
                                             />
-                                            {inventoryByVehicleTypeForCombobox.model}
+                                            {motorByVehicleTypeForCombobox.model}
                                           </ItemTitle>
                                           <ItemDescription>
-                                            {inventoryByVehicleTypeForCombobox.value}
+                                            {motorByVehicleTypeForCombobox.value}
                                           </ItemDescription>
                                         </ItemContent>
                                       </Item>
@@ -530,9 +530,9 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                 onClick={() => {
                     addSaleForm.reset()
                     setStep(1)
-                    setInventoryByVehicleTypeForCombobox([])
-                    setInventoryByVehicleType([])
-                    setInventoryByBranch([])
+                    setMotorByVehicleTypeForCombobox([])
+                    setMotorByVehicleType([])
+                    setMotorByBranch([])
                 }}
                 disabled={isSubmitting}
               >

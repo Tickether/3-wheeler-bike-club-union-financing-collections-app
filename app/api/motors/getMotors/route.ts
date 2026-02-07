@@ -1,4 +1,4 @@
-import Inventory from "@/model/inventory";
+import Motor from "@/model/motor";
 import connectDB from "@/utils/db/mongodb";
 import { middleware } from "@/utils/db/middleware";
 
@@ -13,13 +13,13 @@ export async function POST(
 
     try {
         await connectDB();
-        const inventory = await Inventory.find({});
+        const motor = await Motor.find({});
 
 
-        if (!inventory) {
+        if (!motor) {
             return new Response(
                 JSON.stringify({
-                    error: "Inventory not found",
+                    error: "Motor not found",
                 }),
                 { status: 404 }
             );
@@ -27,14 +27,14 @@ export async function POST(
 
 
         return new Response(
-            JSON.stringify(inventory),
+            JSON.stringify(motor),
             { status: 200 }
         );
 
     } catch (error) {
         return new Response(
             JSON.stringify({
-                error: "Failed to fetch inventory",
+                error: "Failed to fetch motor",
                 details: error
             }),
             { status: 500 }

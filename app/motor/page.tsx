@@ -1,6 +1,6 @@
-import { Wrapper } from "@/components/inventory/wrapper";
+import { Wrapper } from "@/components/motor/wrapper";
 
-export default function Inventory() {
+export default function Motor() {
     return (
         <div className="flex flex-col w-full h-screen">
             <Wrapper/>

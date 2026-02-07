@@ -1,8 +1,8 @@
 "use server"
 
-export async function getInventoryAction() {
+export async function getMotorsAction() {
     try {
-        const response = await fetch(`${process.env.BASE_URL}/api/inventory/getInventory`, {
+        const response = await fetch(`${process.env.BASE_URL}/api/motors/getMotors`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -10,7 +10,7 @@ export async function getInventoryAction() {
             }
         })
         if (!response.ok) {
-            throw new Error("Failed to get inventory")
+            throw new Error("Failed to get motors")
         }
         return response.json()
     } catch (error) {
