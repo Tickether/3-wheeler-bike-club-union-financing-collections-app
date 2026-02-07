@@ -26,13 +26,13 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useState } from "react"
-import { postInventoryAction } from "@/app/actions/inventory/postInventoryAction"
+import { postMotorAction } from "@/app/actions/motors/postMotorAction"
 import { formatNumberWithCommas } from "@/utils/helpers"
 import { BRANCHES, MODELS, VEHICLE_COLORS, VEHICLE_TYPES } from "@/utils/constants"
 
 
 
-const addInventoryFormSchema = z.object({
+const addMotorFormSchema = z.object({
   branch: z
     .string()
     .min(1, "Branch is required"),
@@ -56,16 +56,16 @@ const addInventoryFormSchema = z.object({
     .min(1, "Amount is required"),
 })
 
-export interface AddInventoryProps {
-  getInventory: () => void
+export interface AddMotorProps {
+  getMotors: () => void
 }
 
-export function AddInventory({ getInventory }: AddInventoryProps) {
+export function AddMotor({ getMotors }: AddMotorProps) {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
 
-  const addInventoryForm = useForm({
+  const addMotorForm = useForm({
     defaultValues: {
       branch: "",
       vehicleType: "",
@@ -77,13 +77,13 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
 
     },
     validators: {
-      onSubmit: addInventoryFormSchema,
+      onSubmit: addMotorFormSchema,
     },
     onSubmit: async ({ value }) => {
       setIsSubmitting(true)
       console.log(value)
       try {
-        const postInventory = await postInventoryAction(
+        const postMotor = await postMotorAction(
           value.branch,
           {
             type: value.vehicleType,
@@ -94,13 +94,13 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
           },
           Number(value.amount),
         );
-        if (postInventory) {
+        if (postMotor) {
           toast.success("Vehicle Stock Added to Inventory", {
             description: "You can now add another vehicle to the inventory or close this dialog",
           })
           setIsSubmitting(false);
-          addInventoryForm.reset();
-          getInventory();
+          addMotorForm.reset();
+          getMotors();
         }
       } catch (error) {
         console.error("Form submission error", error);
@@ -131,14 +131,14 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
             <div className="flex flex-col p-4 no-scrollbar -mx-4 h-[50vh] overflow-y-auto">
                 <form
                   className="space-y-6"
-                  id="add-inventory-form"
+                  id="add-motor-form"
                   onSubmit={(e) => {
                     e.preventDefault()
-                    addInventoryForm.handleSubmit()
+                    addMotorForm.handleSubmit()
                   }}
                 >
                   <FieldGroup>
-                    <addInventoryForm.Field
+                    <addMotorForm.Field
                       name="branch"
                       children={(field) => {
                         const isInvalid =
@@ -171,7 +171,7 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
                         )
                       }}
                     />
-                    <addInventoryForm.Field
+                    <addMotorForm.Field
                       name="vehicleType"
                       children={(field) => {
                         const isInvalid =
@@ -185,7 +185,7 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
                               value={field.state.value}
                               onValueChange={(value) => {
                                 field.handleChange(value)
-                                addInventoryForm.resetField("vehicleModel")
+                                addMotorForm.resetField("vehicleModel")
                               }}
                               disabled={isSubmitting}
                             >
@@ -208,11 +208,11 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
                         )
                       }}
                     />
-                    <addInventoryForm.Subscribe
+                    <addMotorForm.Subscribe
                       selector={(state) => state.values.vehicleType}
                     >
                       {(vehicleType) => (
-                        <addInventoryForm.Field
+                        <addMotorForm.Field
                           name="vehicleModel"
                           children={(field) => {
                             const isInvalid =
@@ -250,8 +250,8 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
                           }}
                         />
                       )}
-                    </addInventoryForm.Subscribe>
-                    <addInventoryForm.Field
+                    </addMotorForm.Subscribe>
+                    <addMotorForm.Field
                       name="vehicleColor"
                       children={(field) => {
                         const isInvalid =
@@ -286,7 +286,7 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
                         )
                       }}
                     />
-                    <addInventoryForm.Field
+                    <addMotorForm.Field
                       name="vehicleVin"
                       children={(field) => {
                         const isInvalid =
@@ -319,7 +319,7 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
                         )
                       }}
                     />
-                    <addInventoryForm.Field
+                    <addMotorForm.Field
                       name="vehicleEngine"
                       children={(field) => {
                         const isInvalid =
@@ -352,7 +352,7 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
                         )
                       }}
                     />
-                    <addInventoryForm.Field
+                    <addMotorForm.Field
                       name="amount"
                       children={(field) => {
                         const isInvalid =
@@ -394,10 +394,10 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
           </div>
           <DialogFooter>
             <Field orientation="horizontal" className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => addInventoryForm.reset()} disabled={isSubmitting}>
+              <Button type="button" variant="outline" onClick={() => addMotorForm.reset()} disabled={isSubmitting}>
                 Reset
               </Button>
-              <Button type="submit" form="add-inventory-form" disabled={isSubmitting}>
+              <Button type="submit" form="add-motor-form" disabled={isSubmitting}>
                 {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CirclePile className="h-4 w-4" />}
                 Submit
               </Button>

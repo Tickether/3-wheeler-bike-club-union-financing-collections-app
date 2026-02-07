@@ -4,24 +4,24 @@ import { Package, Plus, TriangleAlert } from "lucide-react";
 import { Menu } from "@/components/top/menu";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty";
-import { Inventory, useGetInventory } from "@/hooks/useGetInventory";
-import { AddInventory } from "@/components/inventory/addInventory";
-import { columns } from "@/components/inventory/columns";
-import { DataTable } from "@/components/inventory/dataTable";
+import { Motor, useGetMotors } from "@/hooks/useGetMotors";
+import { AddMotor } from "@/components/motor/addMotor";
+import { columns } from "@/components/motor/columns";
+import { DataTable } from "@/components/motor/dataTable";
 import { useEffect, useState } from "react";
 
 export function Wrapper() {
 
-    const { inventory, loading, error, getBackInventory } = useGetInventory()
-    const [inStockInventory, setInStockInventory] = useState<Inventory[]>([])
+    const { motors, loading, error, getBackMotors } = useGetMotors()
+    const [inStockMotors, setInStockMotors] = useState<Motor[]>([])
 
     useEffect(() => {
-        if (inventory) {
-            const filteredInventory = inventory.filter((filteringInventory) => filteringInventory.status === "in stock")
-            setInStockInventory(filteredInventory)
+        if (motors) {
+            const filteredMotors = motors.filter((filteringMotors) => filteringMotors.status === "in stock")
+            setInStockMotors(filteredMotors)
         }
-    }, [inventory])
-    console.log(inStockInventory)
+    }, [motors])
+    console.log(inStockMotors)
     return (
         <div className="flex flex-col h-full p-4 md:p-6 lg:p-8 w-full gap-6">
                 <Menu/>
@@ -32,10 +32,10 @@ export function Wrapper() {
                             <Alert>
                                 <Package className="h-4 w-4" />
                                 <AlertTitle className="font-bold text-primary">
-                                   Inventory
+                                   Motor
                                 </AlertTitle>
                                 <AlertDescription className="text-xs italic">
-                                    <p className="max-md:text-[11px]">{"Track & manage the inventory of all vehicles in stock"}</p>
+                                    <p className="max-md:text-[11px]">{"Track & manage the inventory of all motor vehicles in stock"}</p>
                                 </AlertDescription>
                             </Alert>
                         </div>
@@ -53,7 +53,7 @@ export function Wrapper() {
                                 )
                             }
                             {
-                                inventory && inventory.length === 0 && (
+                                motors && motors.length === 0 && (
                                     <>
                                         <Empty className="bg-muted/30 h-full flex items-center justify-center">
                                             <EmptyHeader>
@@ -66,20 +66,20 @@ export function Wrapper() {
                                                 </EmptyDescription>
                                             </EmptyHeader>
                                             <EmptyContent>
-                                                <AddInventory getInventory={getBackInventory} />
+                                                <AddMotor getMotors={getBackMotors} />
                                             </EmptyContent>
                                         </Empty>
                                     </>
                                 )
                             }
                             {
-                                inventory && inventory.length >= 1 && (
+                                motors && motors.length >= 1 && (
                                     <>
                                         <div className="flex flex-col w-full gap-4">
                                             <div className="flex justify-end">
-                                                <AddInventory getInventory={getBackInventory} />
+                                                <AddMotor getMotors={getBackMotors} />
                                             </div>
-                                            <DataTable columns={columns} data={inStockInventory} />
+                                            <DataTable columns={columns} data={inStockMotors} />
                                         </div>
                                     </>
                                 )

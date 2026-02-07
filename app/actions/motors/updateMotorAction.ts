@@ -1,10 +1,10 @@
 "use server"
 
-export async function updateInventoryAction(
+export async function updateMotorAction(
     _id: string,
 ) {
     try {
-        const response = await fetch(`${process.env.BASE_URL}/api/inventory/updateInventory`, {
+        const response = await fetch(`${process.env.BASE_URL}/api/motors/updateMotor`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -15,7 +15,7 @@ export async function updateInventoryAction(
             })
         })
         if (!response.ok) {
-            throw new Error("Failed to update inventory")
+            throw new Error("Failed to update motor")
         }
         return response.json()
     } catch (error) { 

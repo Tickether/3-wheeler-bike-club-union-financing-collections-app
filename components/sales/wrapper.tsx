@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty";
 import { useGetSales } from "@/hooks/useGetSales";
 import { AddSale } from "./addSale";
-import { useGetInventory } from "@/hooks/useGetInventory";
+import { useGetMotors } from "@/hooks/useGetMotors";
 import { columns } from "./columns";
 import { DataTable } from "./dataTable";
 
@@ -14,7 +14,7 @@ export function Wrapper() {
 
 
     const { sales, loading: salesLoading, error: salesError, getBackSales } = useGetSales()
-    const { inventory, loading: inventoryLoading, error: inventoryError, getBackInventory } = useGetInventory()
+    const { motors, loading: motorsLoading, error: motorsError, getBackMotors } = useGetMotors()
 
     
     return (
@@ -62,7 +62,7 @@ export function Wrapper() {
                                         </EmptyDescription>
                                     </EmptyHeader>
                                     <EmptyContent>
-                                        <AddSale inventory={inventory!} getSales={getBackSales} />
+                                        <AddSale motor={motors!} getSales={getBackSales} />
                                     </EmptyContent>
                                 </Empty>
                             </>
@@ -73,7 +73,7 @@ export function Wrapper() {
                             <>
                             <div className="flex flex-col w-full gap-4">
                                 <div className="flex justify-end">
-                                    <AddSale inventory={inventory!} getSales={getBackSales} />
+                                    <AddSale motor={motors!} getSales={getBackSales} />
                                 </div>
                                 <DataTable columns={columns} data={sales} />
                             </div>

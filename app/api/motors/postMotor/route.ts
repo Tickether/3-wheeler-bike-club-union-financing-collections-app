@@ -1,6 +1,6 @@
 import connectDB from "@/utils/db/mongodb"
 import { middleware } from "@/utils/db/middleware"
-import Inventory from "@/model/inventory"
+import Motor from "@/model/motor"
 
 export async function POST(
     req: Request,
@@ -14,13 +14,13 @@ export async function POST(
 
     try {
         await connectDB()
-        const inventory = await Inventory.create({ 
+        const motor = await Motor.create({ 
             branch: branch,
             vehicle: vehicle,
             amount: amount,
             status: "in stock",
         })
-        return new Response(JSON.stringify(inventory))
+        return new Response(JSON.stringify(motor))
     } catch (error) {
         return new Response(JSON.stringify({ message: "Internal Server Error" }), { status: 500 })
     }

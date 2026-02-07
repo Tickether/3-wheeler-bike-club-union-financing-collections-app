@@ -1,6 +1,6 @@
 import connectDB from "@/utils/db/mongodb"
 import { middleware } from "@/utils/db/middleware"
-import Inventory from "@/model/inventory"
+import Motor from "@/model/motor"
 
 export async function POST(
     req: Request,
@@ -14,14 +14,14 @@ export async function POST(
 
     try {
         await connectDB()
-        const inventory = await Inventory.findByIdAndUpdate({_id:_id}, { 
+        const motor = await Motor.findByIdAndUpdate({_id:_id}, { 
             status: "out of stock",
         }, { new: true })
 
-        if (!inventory) {
+        if (!motor) {
             return new Response(
                 JSON.stringify({
-                    error: "Inventory not found",
+                    error: "Motor not found",
                 }),
                 { status: 404 }
             );
@@ -29,7 +29,7 @@ export async function POST(
 
 
         return new Response(
-            JSON.stringify(inventory),
+            JSON.stringify(motor),
             { status: 200 }
         );
 

@@ -1,12 +1,12 @@
 import mongoose from "mongoose"
 
-const InventorySchema = new mongoose.Schema(
+const SpareSchema = new mongoose.Schema(
     {
         branch: {
             type: String,
             enum: ["head-office-kasoa", "walantu-kasoa", "escobar-kasoa", "buduburam-liberia-camp", "dwenase-sefwi-wiawso"],
         },
-        vehicle: {
+        part: {
             type: {
                 type: String,
                 enum: ["motorcycle", "scooter", "semi-auto", "tricycle"],
@@ -14,17 +14,12 @@ const InventorySchema = new mongoose.Schema(
             model: {
                 type: String,
             },
-            color: {
+            no: {
                 type: String,
             },
-            vin: {
+            serial: {
                 type: String,
-                unique: true,
             },
-            engine: {
-                type: String,
-                unique: true,
-            }
         },
         amount: {
             type: Number,
@@ -48,6 +43,6 @@ const InventorySchema = new mongoose.Schema(
 
 )
 
-const Inventory = mongoose.models.Inventory || mongoose.model("Inventory", InventorySchema)
+const Spare = mongoose.models.Spare || mongoose.model("Spare", SpareSchema)
 
-export default Inventory
+export default Spare;
